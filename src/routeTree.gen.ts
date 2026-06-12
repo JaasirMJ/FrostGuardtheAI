@@ -9,17 +9,48 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TrackRouteImport } from './routes/track'
+import { Route as SplashRouteImport } from './routes/splash'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as InstallRouteImport } from './routes/install'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AppIndexRouteImport } from './routes/app.index'
 import { Route as AppShipmentsRouteImport } from './routes/app.shipments'
 import { Route as AppScanRouteImport } from './routes/app.scan'
 import { Route as AppRegisterRouteImport } from './routes/app.register'
+import { Route as AppProfileRouteImport } from './routes/app.profile'
 import { Route as AppDashboardRouteImport } from './routes/app.dashboard'
 import { Route as AppCopilotRouteImport } from './routes/app.copilot'
 import { Route as AppAnalysisRouteImport } from './routes/app.analysis'
 import { Route as AppAdminRouteImport } from './routes/app.admin'
 
+const TrackRoute = TrackRouteImport.update({
+  id: '/track',
+  path: '/track',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SplashRoute = SplashRouteImport.update({
+  id: '/splash',
+  path: '/splash',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InstallRoute = InstallRouteImport.update({
+  id: '/install',
+  path: '/install',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AppRoute = AppRouteImport.update({
   id: '/app',
   path: '/app',
@@ -50,6 +81,11 @@ const AppRegisterRoute = AppRegisterRouteImport.update({
   path: '/register',
   getParentRoute: () => AppRoute,
 } as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -74,10 +110,16 @@ const AppAdminRoute = AppAdminRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/install': typeof InstallRoute
+  '/pricing': typeof PricingRoute
+  '/splash': typeof SplashRoute
+  '/track': typeof TrackRoute
   '/app/admin': typeof AppAdminRoute
   '/app/analysis': typeof AppAnalysisRoute
   '/app/copilot': typeof AppCopilotRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/register': typeof AppRegisterRoute
   '/app/scan': typeof AppScanRoute
   '/app/shipments': typeof AppShipmentsRoute
@@ -85,10 +127,16 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
+  '/install': typeof InstallRoute
+  '/pricing': typeof PricingRoute
+  '/splash': typeof SplashRoute
+  '/track': typeof TrackRoute
   '/app/admin': typeof AppAdminRoute
   '/app/analysis': typeof AppAnalysisRoute
   '/app/copilot': typeof AppCopilotRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/register': typeof AppRegisterRoute
   '/app/scan': typeof AppScanRoute
   '/app/shipments': typeof AppShipmentsRoute
@@ -98,10 +146,16 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/app': typeof AppRouteWithChildren
+  '/auth': typeof AuthRoute
+  '/install': typeof InstallRoute
+  '/pricing': typeof PricingRoute
+  '/splash': typeof SplashRoute
+  '/track': typeof TrackRoute
   '/app/admin': typeof AppAdminRoute
   '/app/analysis': typeof AppAnalysisRoute
   '/app/copilot': typeof AppCopilotRoute
   '/app/dashboard': typeof AppDashboardRoute
+  '/app/profile': typeof AppProfileRoute
   '/app/register': typeof AppRegisterRoute
   '/app/scan': typeof AppScanRoute
   '/app/shipments': typeof AppShipmentsRoute
@@ -112,10 +166,16 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/app'
+    | '/auth'
+    | '/install'
+    | '/pricing'
+    | '/splash'
+    | '/track'
     | '/app/admin'
     | '/app/analysis'
     | '/app/copilot'
     | '/app/dashboard'
+    | '/app/profile'
     | '/app/register'
     | '/app/scan'
     | '/app/shipments'
@@ -123,10 +183,16 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/auth'
+    | '/install'
+    | '/pricing'
+    | '/splash'
+    | '/track'
     | '/app/admin'
     | '/app/analysis'
     | '/app/copilot'
     | '/app/dashboard'
+    | '/app/profile'
     | '/app/register'
     | '/app/scan'
     | '/app/shipments'
@@ -135,10 +201,16 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/app'
+    | '/auth'
+    | '/install'
+    | '/pricing'
+    | '/splash'
+    | '/track'
     | '/app/admin'
     | '/app/analysis'
     | '/app/copilot'
     | '/app/dashboard'
+    | '/app/profile'
     | '/app/register'
     | '/app/scan'
     | '/app/shipments'
@@ -148,10 +220,50 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppRoute: typeof AppRouteWithChildren
+  AuthRoute: typeof AuthRoute
+  InstallRoute: typeof InstallRoute
+  PricingRoute: typeof PricingRoute
+  SplashRoute: typeof SplashRoute
+  TrackRoute: typeof TrackRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/track': {
+      id: '/track'
+      path: '/track'
+      fullPath: '/track'
+      preLoaderRoute: typeof TrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/splash': {
+      id: '/splash'
+      path: '/splash'
+      fullPath: '/splash'
+      preLoaderRoute: typeof SplashRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/install': {
+      id: '/install'
+      path: '/install'
+      fullPath: '/install'
+      preLoaderRoute: typeof InstallRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/app': {
       id: '/app'
       path: '/app'
@@ -194,6 +306,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRegisterRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/profile': {
+      id: '/app/profile'
+      path: '/profile'
+      fullPath: '/app/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/app/dashboard': {
       id: '/app/dashboard'
       path: '/dashboard'
@@ -230,6 +349,7 @@ interface AppRouteChildren {
   AppAnalysisRoute: typeof AppAnalysisRoute
   AppCopilotRoute: typeof AppCopilotRoute
   AppDashboardRoute: typeof AppDashboardRoute
+  AppProfileRoute: typeof AppProfileRoute
   AppRegisterRoute: typeof AppRegisterRoute
   AppScanRoute: typeof AppScanRoute
   AppShipmentsRoute: typeof AppShipmentsRoute
@@ -241,6 +361,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppAnalysisRoute: AppAnalysisRoute,
   AppCopilotRoute: AppCopilotRoute,
   AppDashboardRoute: AppDashboardRoute,
+  AppProfileRoute: AppProfileRoute,
   AppRegisterRoute: AppRegisterRoute,
   AppScanRoute: AppScanRoute,
   AppShipmentsRoute: AppShipmentsRoute,
@@ -252,6 +373,11 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppRoute: AppRouteWithChildren,
+  AuthRoute: AuthRoute,
+  InstallRoute: InstallRoute,
+  PricingRoute: PricingRoute,
+  SplashRoute: SplashRoute,
+  TrackRoute: TrackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
