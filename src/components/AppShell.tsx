@@ -1,7 +1,10 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, PackagePlus, ScanLine, FlaskConical, Bot, Boxes, ShieldCheck, Bell, Tag } from "lucide-react";
+import { LayoutDashboard, PackagePlus, ScanLine, FlaskConical, Bot, Boxes, ShieldCheck, Bell, Tag, Moon, Sun } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "./ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { notifications } from "@/lib/mock-data";
+import { useTheme } from "@/hooks/use-theme";
 
 const nav = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -53,10 +56,7 @@ export function AppShell() {
             <div className="hidden lg:block text-sm text-muted-foreground">
               {nav.find((n) => path.startsWith(n.to))?.label ?? "FrostGuard"}
             </div>
-            <div className="flex items-center gap-2">
-              <Button variant="ghost" size="icon"><Bell className="h-4 w-4" /></Button>
-              <Link to="/app/profile" className="h-8 w-8 rounded-full bg-gradient-primary grid place-items-center text-xs font-semibold text-primary-foreground hover:opacity-90" title="Profile">RS</Link>
-            </div>
+            <HeaderActions />
           </div>
           <nav className="lg:hidden flex gap-1 overflow-x-auto px-2 pb-2">
             {nav.map((n) => {
@@ -75,6 +75,38 @@ export function AppShell() {
         </header>
         <main className="p-4 lg:p-8"><Outlet /></main>
       </div>
+    </div>
+  );
+}
+
+function HeaderActions() {
+  const { isDark, toggle } = useTheme();
+  const toneClass = (t: "destructive" | "warning" | "primary") =>
+    t === "destructive" ? "border-destructive/30 bg-destructive/5"
+    : t === "warning" ? "border-warning/30 bg-warning/5"
+    : "border-primary/30 bg-primary/5";
+  return (
+    <div className="flex items-center gap-2">
+      <Button variant="ghost" size="icon" onClick={toggle} title={isDark ? "Switch to light" : "Switch to dark"}>
+        {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      </Button>
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="ghost" size="icon" className="relative">
+            <Bell className="h-4 w-4" />
+            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-destructive" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent align="end" className="w-80 p-0">
+          <div className="border-b border-border px-4 py-3 text-sm font-semibold">Notifications</div>
+          <div className="max-h-80 space-y-2 overflow-y-auto p-3">
+            {notifications.map((n, i) => (
+              <div key={i} className={`rounded-lg border p-2.5 text-xs ${toneClass(n.tone)}`}>{n.text}</div>
+            ))}
+          </div>
+        </PopoverContent>
+      </Popover>
+      <Link to="/app/profile" className="h-8 w-8 rounded-full bg-gradient-primary grid place-items-center text-xs font-semibold text-primary-foreground hover:opacity-90" title="Profile">RS</Link>
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { notifications } from "@/lib/mock-data";
 import { Bell, LogOut, Moon, Globe, ShieldCheck } from "lucide-react";
+import { useTheme } from "@/hooks/use-theme";
 
 export const Route = createFileRoute("/app/profile")({
   head: () => ({ meta: [{ title: "Profile · FrostGuard" }] }),
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/app/profile")({
 });
 
 function Profile() {
+  const { isDark, setTheme } = useTheme();
   return (
     <div className="space-y-6">
       <div>
@@ -40,8 +42,8 @@ function Profile() {
 
           <div className="mt-6 space-y-3">
             <div className="flex items-center justify-between rounded-xl border border-border p-4">
-              <div className="flex items-center gap-3"><Moon className="h-4 w-4 text-muted-foreground" /><div><div className="text-sm font-medium">Dark mode</div><div className="text-xs text-muted-foreground">Use system preference</div></div></div>
-              <Switch />
+              <div className="flex items-center gap-3"><Moon className="h-4 w-4 text-muted-foreground" /><div><div className="text-sm font-medium">Dark mode</div><div className="text-xs text-muted-foreground">{isDark ? "On" : "Off"} · persists on this device</div></div></div>
+              <Switch checked={isDark} onCheckedChange={(v) => setTheme(v ? "dark" : "light")} />
             </div>
             <div className="flex items-center justify-between rounded-xl border border-border p-4">
               <div className="flex items-center gap-3"><Globe className="h-4 w-4 text-muted-foreground" /><div><div className="text-sm font-medium">Language</div><div className="text-xs text-muted-foreground">English (India)</div></div></div>
