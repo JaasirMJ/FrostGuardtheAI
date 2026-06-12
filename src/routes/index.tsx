@@ -28,9 +28,9 @@ function Landing() {
             <a href="#impact" className="hover:text-foreground">Impact</a>
           </nav>
           <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" size="sm"><Link to="/app/dashboard">Sign in</Link></Button>
+            <Button asChild variant="ghost" size="sm"><Link to="/auth">Sign in</Link></Button>
             <Button asChild size="sm" className="bg-gradient-primary shadow-elegant">
-              <Link to="/app/dashboard">Launch app <ArrowRight className="ml-1 h-4 w-4" /></Link>
+              <Link to="/splash">Launch app <ArrowRight className="ml-1 h-4 w-4" /></Link>
             </Button>
           </div>
         </div>
@@ -55,7 +55,7 @@ function Landing() {
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button asChild size="lg" className="bg-gradient-primary shadow-elegant">
-                  <Link to="/app/dashboard">Open dashboard <ArrowRight className="ml-2 h-4 w-4" /></Link>
+                  <Link to="/splash">Open dashboard <ArrowRight className="ml-2 h-4 w-4" /></Link>
                 </Button>
                 <Button asChild size="lg" variant="outline">
                   <Link to="/app/scan">Try the QR scanner</Link>

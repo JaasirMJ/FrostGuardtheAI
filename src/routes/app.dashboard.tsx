@@ -2,9 +2,9 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { kpis, trend, categoryRisk, shipments, statusMeta, insights } from "@/lib/mock-data";
+import { kpis, trend, categoryRisk, shipments, statusMeta, insights, recentActivity, cityHeat, heatColor } from "@/lib/mock-data";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { ArrowUpRight, ShieldCheck, AlertTriangle, XCircle, Boxes, Sparkles, MapPin } from "lucide-react";
+import { ArrowUpRight, ShieldCheck, AlertTriangle, XCircle, Boxes, Sparkles, MapPin, Truck, CheckCircle2, Clock, BellRing, Activity } from "lucide-react";
 
 export const Route = createFileRoute("/app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard · FrostGuard" }] }),
@@ -17,10 +17,10 @@ function KpiCard({ icon: Icon, label, value, tone, delta }: any) {
       <div className="flex items-start justify-between">
         <div>
           <div className="text-xs font-medium text-muted-foreground">{label}</div>
-          <div className="mt-1 font-display text-3xl font-bold">{value.toLocaleString()}</div>
+          <div className="mt-1 font-display text-2xl font-bold">{value.toLocaleString()}</div>
           {delta && <div className="mt-1 text-xs text-success flex items-center gap-1"><ArrowUpRight className="h-3 w-3" />{delta}</div>}
         </div>
-        <div className={`h-10 w-10 rounded-xl grid place-items-center ${tone}`}><Icon className="h-5 w-5" /></div>
+        <div className={`h-9 w-9 rounded-xl grid place-items-center ${tone}`}><Icon className="h-4 w-4" /></div>
       </div>
     </Card>
   );
@@ -37,11 +37,15 @@ function Dashboard() {
         <Button asChild className="bg-gradient-primary shadow-elegant"><Link to="/app/register">+ New shipment</Link></Button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard icon={Boxes} label="Total shipments" value={kpis.total} tone="bg-primary/10 text-primary" delta="+4.2% this week" />
-        <KpiCard icon={ShieldCheck} label="Safe" value={kpis.safe} tone="bg-success/15 text-success" delta="86.3% rate" />
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
+        <KpiCard icon={Boxes} label="Total shipments" value={kpis.total} tone="bg-primary/10 text-primary" delta="+4.2%" />
+        <KpiCard icon={Truck} label="Active" value={kpis.active} tone="bg-teal/10 text-teal" />
+        <KpiCard icon={CheckCircle2} label="Delivered" value={kpis.delivered} tone="bg-success/15 text-success" />
+        <KpiCard icon={ShieldCheck} label="Safe" value={kpis.safe} tone="bg-success/15 text-success" />
         <KpiCard icon={AlertTriangle} label="Warning" value={kpis.warning} tone="bg-warning/15 text-warning" />
         <KpiCard icon={XCircle} label="Compromised" value={kpis.compromised} tone="bg-destructive/15 text-destructive" />
+        <KpiCard icon={Clock} label="Delayed" value={kpis.delayed} tone="bg-warning/15 text-warning" />
+        <KpiCard icon={BellRing} label="AI Alerts" value={kpis.aiAlerts} tone="bg-primary/10 text-primary" />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
@@ -56,18 +60,9 @@ function Dashboard() {
             <ResponsiveContainer>
               <AreaChart data={trend}>
                 <defs>
-                  <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--color-success)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="var(--color-success)" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--color-warning)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="var(--color-warning)" stopOpacity={0} />
-                  </linearGradient>
-                  <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="var(--color-destructive)" stopOpacity={0.4} />
-                    <stop offset="100%" stopColor="var(--color-destructive)" stopOpacity={0} />
-                  </linearGradient>
+                  <linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="var(--color-success)" stopOpacity={0.4} /><stop offset="100%" stopColor="var(--color-success)" stopOpacity={0} /></linearGradient>
+                  <linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="var(--color-warning)" stopOpacity={0.4} /><stop offset="100%" stopColor="var(--color-warning)" stopOpacity={0} /></linearGradient>
+                  <linearGradient id="g3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="var(--color-destructive)" stopOpacity={0.4} /><stop offset="100%" stopColor="var(--color-destructive)" stopOpacity={0} /></linearGradient>
                 </defs>
                 <CartesianGrid stroke="var(--color-border)" strokeDasharray="3 3" vertical={false} />
                 <XAxis dataKey="day" stroke="var(--color-muted-foreground)" fontSize={12} />
@@ -79,6 +74,53 @@ function Dashboard() {
                 <Area type="monotone" dataKey="compromised" stackId="1" stroke="var(--color-destructive)" fill="url(#g3)" />
               </AreaChart>
             </ResponsiveContainer>
+          </div>
+        </Card>
+
+        <Card className="p-5">
+          <div className="flex items-center gap-2 font-semibold"><Activity className="h-4 w-4 text-primary" /> Recent activity</div>
+          <div className="mt-3 space-y-2.5">
+            {recentActivity.map((a, i) => (
+              <div key={i} className="flex gap-3 text-sm">
+                <div className="text-xs font-mono text-muted-foreground w-16 shrink-0 pt-0.5">{a.time}</div>
+                <div className={`h-2 w-2 mt-1.5 rounded-full shrink-0 ${a.tone === "warning" ? "bg-warning" : a.tone === "destructive" ? "bg-destructive" : "bg-primary"}`} />
+                <div className="text-foreground">{a.text}</div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      <div className="grid gap-4 lg:grid-cols-3">
+        <Card className="p-5 lg:col-span-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2 font-semibold"><MapPin className="h-4 w-4 text-primary" /> India risk heatmap</div>
+            <div className="flex gap-3 text-xs">
+              <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-success" />Safe</span>
+              <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-warning" />Warning</span>
+              <span className="inline-flex items-center gap-1"><span className="h-2 w-2 rounded-full bg-destructive" />High risk</span>
+            </div>
+          </div>
+          <div className="relative mt-4 h-[360px] overflow-hidden rounded-xl border border-border bg-gradient-to-br from-secondary/50 to-background">
+            <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+              {/* stylized india silhouette */}
+              <path d="M30,18 Q42,8 56,14 Q72,16 80,22 Q88,32 84,42 Q92,48 86,56 Q92,64 82,68 Q78,78 70,82 Q62,92 54,90 Q48,98 42,90 Q34,86 32,76 Q22,68 26,58 Q18,52 24,42 Q22,32 30,18 Z"
+                fill="oklch(0.95 0.02 220)" stroke="oklch(0.85 0.03 220)" strokeWidth="0.5" opacity="0.6" />
+              {cityHeat.map((c) => (
+                <g key={c.name}>
+                  <circle cx={c.x} cy={c.y} r={Math.max(1.6, Math.min(4, c.count / 90))} fill={heatColor[c.level]} opacity="0.85">
+                    <animate attributeName="r" values={`${Math.max(1.6, Math.min(4, c.count/90))};${Math.max(2.4, Math.min(5.5, c.count/70))};${Math.max(1.6, Math.min(4, c.count/90))}`} dur="2.4s" repeatCount="indefinite" />
+                  </circle>
+                  <circle cx={c.x} cy={c.y} r={Math.max(2.4, Math.min(6.5, c.count / 60))} fill={heatColor[c.level]} opacity="0.2" />
+                </g>
+              ))}
+            </svg>
+            <div className="pointer-events-none absolute inset-0">
+              {cityHeat.map((c) => (
+                <div key={c.name} className="absolute -translate-x-1/2 -translate-y-1/2 text-[10px] font-medium text-foreground/80"
+                  style={{ left: `${c.x}%`, top: `${c.y + 3}%` }}>{c.name}</div>
+              ))}
+            </div>
           </div>
         </Card>
 
@@ -143,28 +185,6 @@ function Dashboard() {
           </div>
         </Card>
       </div>
-
-      <Card className="p-5">
-        <div className="flex items-center gap-2 font-semibold"><MapPin className="h-4 w-4 text-primary" /> Regional map</div>
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { r: "Tamil Nadu", s: 412, w: 32, c: 8 },
-            { r: "Karnataka", s: 268, w: 24, c: 11 },
-            { r: "Maharashtra", s: 221, w: 36, c: 17 },
-            { r: "Gujarat", s: 208, w: 32, c: 15 },
-          ].map((x) => (
-            <div key={x.r} className="rounded-xl border border-border p-4">
-              <div className="text-sm font-medium">{x.r}</div>
-              <div className="mt-2 flex items-end gap-1.5">
-                <span className="h-2 rounded-full bg-success" style={{ width: `${x.s / 5}px` }} />
-                <span className="h-2 rounded-full bg-warning" style={{ width: `${x.w}px` }} />
-                <span className="h-2 rounded-full bg-destructive" style={{ width: `${x.c * 2}px` }} />
-              </div>
-              <div className="mt-2 text-xs text-muted-foreground">{x.s} safe · {x.w} warn · {x.c} comp.</div>
-            </div>
-          ))}
-        </div>
-      </Card>
     </div>
   );
 }

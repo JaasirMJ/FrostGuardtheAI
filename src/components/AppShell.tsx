@@ -1,5 +1,5 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, PackagePlus, ScanLine, FlaskConical, Bot, Boxes, ShieldCheck, Bell } from "lucide-react";
+import { LayoutDashboard, PackagePlus, ScanLine, FlaskConical, Bot, Boxes, ShieldCheck, Bell, Tag } from "lucide-react";
 import { Logo } from "./Logo";
 import { Button } from "./ui/button";
 
@@ -34,6 +34,10 @@ export function AppShell() {
               </Link>
             );
           })}
+          <Link to="/pricing"
+            className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-sidebar-foreground hover:bg-sidebar-accent">
+            <Tag className="h-4 w-4" />Pricing
+          </Link>
         </nav>
         <div className="m-3 rounded-xl bg-gradient-teal p-4 text-teal-foreground">
           <div className="text-xs font-semibold opacity-80">Coverage</div>
@@ -51,7 +55,7 @@ export function AppShell() {
             </div>
             <div className="flex items-center gap-2">
               <Button variant="ghost" size="icon"><Bell className="h-4 w-4" /></Button>
-              <div className="h-8 w-8 rounded-full bg-gradient-primary grid place-items-center text-xs font-semibold text-primary-foreground">RS</div>
+              <Link to="/app/profile" className="h-8 w-8 rounded-full bg-gradient-primary grid place-items-center text-xs font-semibold text-primary-foreground hover:opacity-90" title="Profile">RS</Link>
             </div>
           </div>
           <nav className="lg:hidden flex gap-1 overflow-x-auto px-2 pb-2">

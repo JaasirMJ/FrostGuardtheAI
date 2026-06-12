@@ -11,21 +11,30 @@ export const Route = createFileRoute("/app/copilot")({
 });
 
 const suggestions = [
-  "Which route has the highest risk this week?",
-  "Show compromised vaccine shipments.",
-  "Which region needs investigation?",
-  "Are afternoon dispatches riskier?",
+  "Show compromised vaccines.",
+  "Which route is most risky?",
+  "Show today's alerts.",
+  "Which city has highest failures?",
+  "Show insulin shipments in Chennai.",
+  "Generate health report.",
+  "Predict next risk area.",
 ];
 
 const canned: Record<string, string> = {
-  "Which route has the highest risk this week?":
-    "**Chennai → Villupuram** has the highest risk: 3 of the last 8 vaccine shipments hit medium risk, with a mean health score of 71. The Kanchipuram relay shows a temperature drift at midday — worth investigating.",
-  "Show compromised vaccine shipments.":
-    "There are **2 compromised vaccine shipments** in the last 14 days:\n• FG-2026-00186 — Blood Sample · Mumbai → Pune (Health 42)\n• FG-2026-00171 — MMR vaccine · Hyderabad → Karimnagar (Health 51)\nBoth show dark-blue indicators and >2h exposure events.",
-  "Which region needs investigation?":
-    "**Maharashtra** shows the highest compromised rate at 6.4% (vs 2.9% network average), concentrated in evening deliveries. I'd start with the Pune receiving facility.",
-  "Are afternoon dispatches riskier?":
-    "Yes — shipments dispatched after **13:00** have a 2.4× higher warning rate than morning dispatches. Heat exposure at the loading bay is the most likely cause.",
+  "Show compromised vaccines.":
+    "**2 compromised vaccine shipments** in the last 14 days:\n• FG-VAC-HYD-20260613-B4K6M — BCG vials · Hyderabad → Warangal (Health 38)\n• FG-VAC-CHN-20260610-N8R2J — MMR pediatric · Chennai → Madurai (Health 51)\nBoth show dark-blue indicators and >2h exposure events.",
+  "Which route is most risky?":
+    "**Chennai → Villupuram** tops the risk leaderboard this week: 3 of the last 8 vaccine shipments hit medium risk, mean health 71. The Kanchipuram relay shows temperature drift at midday — worth investigating.",
+  "Show today's alerts.":
+    "**4 alerts today**:\n• Compromised — FG-BLD-MUM-20260613-Q7T2W (Pune receiving)\n• Warning — Hassan distributor temperature spike\n• Predicted delay — Bengaluru → Hassan, ~3h\n• Batch anomaly — Batch #A129 (5 shipments)",
+  "Which city has highest failures?":
+    "**Mumbai** leads on compromised rate at 6.4% (vs 2.9% network average), driven by evening dispatches. Pune receiving facility is the dominant root cause.",
+  "Show insulin shipments in Chennai.":
+    "Found **3 insulin shipments** routed via Chennai in the last 7 days. All currently Safe — mean health 91. Cold-pack carton performance remains strong across the Chennai DC.",
+  "Generate health report.":
+    "**Weekly health report** generated:\n• Total shipments: 1,284 (+4.2%)\n• Safe rate: 86.3%\n• Compromised: 51 (-3 vs last week)\n• Top risk route: Chennai → Villupuram\n• AI confidence (avg): 88%",
+  "Predict next risk area.":
+    "Forecast points to **Trichy relay corridor** over the next 5 days — seasonal heat + dealer-warehouse cooling capacity historically dips in mid-June. Recommended action: pre-position extra cold-packs.",
 };
 
 function Copilot() {
@@ -65,10 +74,10 @@ function Copilot() {
         </Card>
 
         <Card className="p-5">
-          <div className="flex items-center gap-2 font-semibold"><Sparkles className="h-4 w-4 text-teal" /> Try asking</div>
+          <div className="flex items-center gap-2 font-semibold"><Sparkles className="h-4 w-4 text-teal" /> Suggested prompts</div>
           <div className="mt-4 space-y-2">
             {suggestions.map((s) => (
-              <button key={s} onClick={() => send(s)} className="w-full rounded-xl border border-border p-3 text-left text-sm hover:bg-secondary">
+              <button key={s} onClick={() => send(s)} className="w-full rounded-xl border border-border p-3 text-left text-sm hover:bg-secondary transition">
                 {s}
               </button>
             ))}
